@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Regex Analysis Toolkit</title>
+<style>
+body {font-family:Arial;padding:40px;background:#f5f5f5}
+input,textarea {padding:10px;width:450px;margin:5px}
+button {padding:10px;margin:5px}
+.card {background:white;padding:20px;margin-top:20px;border-radius:10px}
+.warning{color:red}
+</style>
+</head>
+
+<body>
+
+<h1>Regex Analysis Toolkit</h1>
+
+<form method="POST">
+<input name="regex" placeholder="Enter regex..." value="{{pattern}}"><br>
+<textarea name="text" placeholder="Optional: test regex on text">{{sample_text}}</textarea><br>
+<button type="submit">Analyze</button>
+</form>
+
+{% if result %}
+<div class="card">
+<h2>Validation</h2>
+<p>Valid Regex: {{result.is_valid}}</p>
+
+{% if not result.is_valid %}
+<p class="warning">Invalid Regex Pattern!</p>
+{% endif %}
+
+{% if result.is_valid %}
+<h2>Structure Analysis</h2>
+<p>Length: {{result.length}}</p>
+<p>* : {{result.stars}} | + : {{result.pluses}} | ? : {{result.questions}}</p>
+<p>Alternations: {{result.alternations}}</p>
+<p>Groups: {{result.groups}}</p>
+
+<h2>Features</h2>
+<p>Repetition: {{result.has_repetition}}</p>
+<p>Alternation: {{result.has_alternation}}</p>
+<p>Grouping: {{result.has_groups}}</p>
+
+<h2>Complexity</h2>
+<p>{{result.complexity}}</p>
+
+{% if result.redos_warnings %}
+<h2 class="warning">ReDoS Warnings</h2>
+<ul>
+{% for w in result.redos_warnings %}
+<li>{{w}}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endif %}
+</div>
+{% endif %}
+
+{% if matches %}
+<div class="card">
+<h2>Matches Found</h2>
+<ul>
+{% for m in matches %}
+<li>{{m}}</li>
+{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+</body>
+</html>
